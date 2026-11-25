@@ -1,6 +1,6 @@
 allowAttachments: true
 allowGuestFieldUploads: true
-attachmentVolumeId: 1
+attachmentVolume: ccdc8e59-e702-4e28-badf-6166bfbebbac # Comment Photos
 interactionMode: updown
 moderatorUserGroup: d42668a0-c5dc-437e-93c4-b3f919f0c842 # Moderators
 staffBadgeGroups:

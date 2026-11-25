@@ -2,7 +2,7 @@
  * Copies the hosted builds of the React, Vue and web components starters into the Craft site's web
  * root, at /react/, /vue/ and /web/, so they're served from Craft's own origin. Run after
  * `npm run build:hosted`. Next.js and Nuxt run as servers of their own, because member tokens and a
- * shared cookie both need their own origin (see docs/forge-deployment.md).
+ * shared cookie both need their own origin.
  */
 import { cp, rm, stat } from 'node:fs/promises';
 import path from 'node:path';

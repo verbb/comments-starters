@@ -69,7 +69,7 @@ return [
     'allowGuestVoting' => true,
     'allowGuestFlagging' => true,
 
-    'turnstileEnabled' => App::env('COMMENTS_TURNSTILE') !== 'off',
+    'challengeProvider' => App::env('COMMENTS_TURNSTILE') === 'off' ? '' : 'turnstile',
     'turnstileKey' => $turnstileKey,
     'turnstileSecret' => $turnstileSecret,
     // Turnstile checks the hostname a token was issued for. The local front ends run on these.

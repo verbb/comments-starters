@@ -73,10 +73,6 @@ In the `dev` environment, `craft/config/comments.php` allows the starters' local
 
 Turnstile can't issue a token in a headless browser, so set `COMMENTS_TURNSTILE=off` in `craft/.env` before running anything automated that posts comments. The starters use Cloudflare's test keys, which always pass in a real browser.
 
-## Hosting
-
-`npm run assemble:hosted` builds the React, Vue and web components starters for the `/react/`, `/vue/` and `/web/` folders of the Craft site and copies them there. Their own pages, such as `/react/custom`, need the history fallbacks in the deployment notes, which the local DDEV site doesn't have, so open them from each app's home page locally. The Next.js and Nuxt starters run as Node servers on origins of their own. [docs/forge-deployment.md](docs/forge-deployment.md) covers deploying the lot.
-
 ## Licence
 
 The starters are released under the MIT licence, so you can copy their code into your own site. Comments, Editor and Protect keep their own licences.

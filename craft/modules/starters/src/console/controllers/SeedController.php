@@ -102,10 +102,9 @@ class SeedController extends Controller
         $settings = Comments::$plugin->getSettings();
         $settings->participantNotifications = [];
         $settings->staffNotifications = [];
-        $settings->turnstileEnabled = false;
-        $settings->recaptchaEnabled = false;
+        $settings->challengeProvider = '';
+        $settings->spamClassifier = '';
         $settings->honeypotEnabled = false;
-        $settings->javascriptCheckEnabled = false;
         $settings->replayProtectionEnabled = false;
         $settings->rateLimitEnabled = false;
         $settings->minimumSubmitTime = 0;
@@ -372,7 +371,7 @@ class SeedController extends Controller
             'staffBadgeLabel' => 'Team',
             'interactionMode' => 'updown',
             'allowAttachments' => true,
-            'attachmentVolumeId' => (int)$this->_photoVolume->id,
+            'attachmentVolume' => $this->_photoVolume->uid,
         ];
         $model = Comments::$plugin->getSettings();
 
@@ -381,6 +380,10 @@ class SeedController extends Controller
             // This request's settings were loaded before, so the seeding below needs them too.
             $model->$name = $value;
         }
+
+        // Comments works the volume's ID out from its UID when it loads its settings, which this
+        // request already has.
+        $model->attachmentVolumeId = (int)$this->_photoVolume->id;
 
         $this->stdout("Set up the comment form's fields and Comments' settings.\n");
     }
