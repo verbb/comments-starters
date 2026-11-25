@@ -46,6 +46,8 @@ export async function DELETE(request: NextRequest) {
 
 function isOwnJsonRequest(request: NextRequest): boolean {
     const origin = request.headers.get('origin');
+    // Behind a proxy the app is reached over plain HTTP, so its public origin comes from the env when set.
+    const ownOrigin = process.env.STARTER_PUBLIC_ORIGIN || request.nextUrl.origin;
 
-    return request.headers.get('content-type')?.startsWith('application/json') === true && (origin === null || origin === request.nextUrl.origin);
+    return request.headers.get('content-type')?.startsWith('application/json') === true && (origin === null || origin === ownOrigin);
 }

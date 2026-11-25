@@ -29,8 +29,9 @@ async function forward(request: NextRequest, { params }: { params: Promise<{ pat
     HOP_HEADERS.forEach((name) => headers.delete(name));
 
     // Only a request from this app's own pages is passed on as Craft's own. Anything else keeps its
-    // Origin, so Craft refuses it as it would without the proxy.
-    if (headers.get('origin') === request.nextUrl.origin) {
+    // Origin, so Craft refuses it as it would without the proxy. Behind a proxy of its own the app is
+    // reached over plain HTTP, so its public origin comes from the env when set.
+    if (headers.get('origin') === (process.env.STARTER_PUBLIC_ORIGIN || request.nextUrl.origin)) {
         headers.set('origin', craftOrigin);
     }
 
