@@ -200,7 +200,7 @@ await check('web', async (page, expect) => {
     expect('thread draws on another origin', await count(page, '.comments__comment'), seeded.comments);
     // A guest's form, with its primary button, is drawn once they choose Comment as a guest.
     await page.locator('verbb-comments .comments__join-guest summary').click();
-    await page.locator('verbb-comments .btn-primary').first().waitFor({ timeout: 10000 });
+    await page.locator('verbb-comments .comments__join-guest .comments__submit.btn-primary').waitFor({ timeout: 10000 });
     expect('themeConfig puts the site’s button classes on Comments’ controls', await count(page, 'verbb-comments .btn-primary, verbb-comments .btn-secondary'), (n) => n >= 2);
     await voteRoundTrip(page, expect);
 

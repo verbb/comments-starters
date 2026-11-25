@@ -3,6 +3,7 @@ namespace modules\starters\console\controllers;
 
 use Craft;
 use craft\console\Controller;
+use craft\db\Query;
 use craft\elements\Asset;
 use craft\elements\conditions\users\GroupConditionRule;
 use craft\elements\Entry;
@@ -41,8 +42,10 @@ use yii\console\ExitCode;
  * in as, and the four custom fields the starters show.
  *
  * Run it once on a fresh install. The structure (groups, fields, the blog and Comments' settings) is
- * saved to project config, so it's only built when missing, and `--content` wipes the seeded posts'
- * comments and creates them again.
+ * saved to project config, so it's only built when missing. `--content` resets what visitors can
+ * change. It deletes every comment on the seeded posts and every uploaded file apart from the seeded
+ * avatars, removes follows and guests, and creates the seeded comments again. Accounts stay as they
+ * are, so a hosted copy can run it on a schedule.
  *
  *     ddev craft starters/seed
  *     ddev craft starters/seed --content
@@ -123,6 +126,29 @@ class SeedController extends Controller
 
     // Private Methods
     // =========================================================================
+
+    /**
+     * Removes every follow, then every guest that no comment, vote, report, mention, restriction or
+     * follow refers to. Votes, reports and mentions go with their comments, so after a reset that's
+     * every guest. Members keep theirs, since their accounts stay.
+     */
+    private function _forgetVisitors(): void
+    {
+        $db = Craft::$app->getDb();
+        $follows = $db->createCommand()->delete('{{%comments_subscriptions}}')->execute();
+        $unused = (new Query())
+            ->select(['identities.id'])
+            ->from(['identities' => '{{%comments_identities}}'])
+            ->where(['identities.userId' => null]);
+
+        foreach (['{{%comments_comments}}', '{{%comments_interactions}}', '{{%comments_reports}}', '{{%comments_mentions}}', '{{%comments_restrictions}}', '{{%comments_subscriptions}}'] as $table) {
+            $unused->andWhere(['not exists', (new Query())->from(['used' => $table])->where('[[used.identityId]] = [[identities.id]]')]);
+        }
+
+        $guests = $db->createCommand()->delete('{{%comments_identities}}', ['id' => $unused->column()])->execute();
+
+        $this->stdout("Removed $follows follows and $guests guests.\n");
+    }
 
     private function _ensurePhotoVolume(): Volume
     {
@@ -521,14 +547,20 @@ class SeedController extends Controller
                 Craft::$app->getElements()->deleteElement($comment, true);
             }
 
-            // The seeded photo goes too, so a rerun doesn't leave another copy each time.
-            $photos = Asset::find()->volumeId($this->_photoVolume->id)->folderPath('comments/')->all();
+            // Every file in the volume goes too (the seeded photo and whatever visitors uploaded), apart
+            // from the seeded people's avatars under people/.
+            $files = Asset::find()->volumeId($this->_photoVolume->id)->all();
+            $files = array_filter($files, static fn(Asset $file) => !str_starts_with((string)$file->folderPath, 'people/'));
 
-            foreach ($photos as $photo) {
-                Craft::$app->getElements()->deleteElement($photo, true);
+            foreach ($files as $file) {
+                Craft::$app->getElements()->deleteElement($file, true);
             }
 
-            $this->stdout('Deleted ' . count($comments) . " seeded comments and the seeded photo.\n");
+            $this->stdout('Deleted ' . count($comments) . ' comments and ' . count($files) . " uploaded files.\n");
+
+            // Follows, and the guests nothing refers to any more, so a public demo doesn't keep
+            // visitors' names and emails after it resets.
+            $this->_forgetVisitors();
         }
 
         $this->_seedWelcome($entries['welcome-to-the-comments-starters']);
