@@ -1,0 +1,20 @@
+{#
+ # Datastar asks the server for HTML over server-sent events and morphs it into the page. Choosing a post
+ # patches the whole post, thread included, while refreshing the same post morphs around the thread.
+ #}
+{% extends '_starter' %}
+{% set pageTitle = 'Datastar' %}
+{% set starter = { name: 'Datastar', logo: 'datastar', files: ['datastar/index.twig', 'datastar/_post.twig', 'datastar/_patch.twig'] } %}
+
+{% set posts = craft.entries.section('blog').orderBy('postDate desc').all() %}
+{% set entry = craft.entries.section('blog').slug('welcome-to-the-comments-starters').one() %}
+
+{% block demo %}
+    {% include 'datastar/_post' %}
+
+    {% do view.registerAssetBundle('putyourlightson\\datastar\\assets\\DatastarAssetBundle') %}
+{% endblock %}
+
+{% block about %}
+    Choose a post and Datastar morphs it in from the server. <strong>Refresh from the server</strong> patches the same post again, and the thread stays as it is because it’s marked <code>data-ignore-morph</code>.
+{% endblock %}

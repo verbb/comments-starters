@@ -1,0 +1,23 @@
+{% set posts = craft.entries.section('blog').orderBy('postDate desc').all() %}
+{% set entry = craft.entries.section('blog').slug(slug).one() ?? posts|first %}
+
+<div class="flex flex-wrap gap-2" role="group" aria-label="Posts">
+    {% for post in posts %}
+        <button type="button" class="starter-pill" aria-pressed="{{ post.id == entry.id ? 'true' : 'false' }}" sprig s-val:slug="{{ post.slug }}">{{ post.title }}</button>
+    {% endfor %}
+</div>
+
+<article class="mt-8">
+    <h1 class="text-3xl font-semibold tracking-tight">{{ entry.title }}</h1>
+    <div class="mt-6 space-y-4 text-lg leading-8 text-slate-700">{{ entry.body|md }}</div>
+
+    <p class="mt-6">
+        <button type="button" class="starter-button" sprig s-val:slug="{{ entry.slug }}">Reload this post</button>
+    </p>
+
+    {# htmx keeps an element with `hx-preserve` (Sprig's `s-preserve`) when the new HTML has one with the
+       same id, so the id names the post, and choosing another post still swaps in its own thread. #}
+    <div id="sprig-thread-{{ entry.id }}" s-preserve class="mt-12">
+        {{ craft.comments.render(entry) }}
+    </div>
+</article>

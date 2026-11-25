@@ -1,0 +1,94 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  edfa9298-a885-451f-9ab2-bbc1077aceb7:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: null
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            required: true
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: fbd50874-fbf2-4df1-b494-9b7a352f82b3
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: bd837f6b-0851-4242-8b16-66cde21a84cc # Body
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: f17d1d2f-aaab-497e-a961-53310f2579b8
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: fa619abf-7336-494a-a8c6-fdbf0c1212e6
+        userCondition: null
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: bfb71141-1260-4555-afd8-b9a2d378bd16 # Comments
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 6d3fe283-0ad5-40e1-8455-ebe75d29d85e
+            userCondition: null
+            warning: null
+            width: 100
+        name: Comments
+        uid: 08e68ab4-0187-437f-b7c3-e700501c3f17
+        userCondition: null
+    thumbFieldKey: null
+handle: post
+hasTitleField: true
+icon: null
+name: Post
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

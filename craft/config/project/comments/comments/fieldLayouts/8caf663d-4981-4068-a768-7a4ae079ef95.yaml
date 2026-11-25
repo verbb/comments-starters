@@ -1,0 +1,98 @@
+cardThumbAlignment: end
+tabs:
+  -
+    elementCondition: null
+    elements:
+      -
+        dateAdded: null
+        elementCondition: null
+        instructions: null
+        label: __blank__
+        required: true
+        tip: null
+        type: verbb\comments\fieldlayoutelements\CommentsField
+        uid: 01cbc16e-324b-4280-8e13-62019e83e31d
+        userCondition: null
+        warning: null
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 6da5eda5-51bf-43af-8147-86a2a4114b1a # Rating
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 627e638f-98fa-4040-b511-491e3162e518
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 2d60ab8d-eb5b-4819-993f-b09bcbae1eca # Reading From
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 86f12533-28e7-4491-8554-0ffc8a92d52e
+        userCondition:
+          class: craft\elements\conditions\users\UserCondition
+          conditionRules:
+            -
+              class: craft\elements\conditions\users\GroupConditionRule
+              operator: in
+              uid: e63afd52-ef7f-4ce6-9cfb-ceeca2d6fa46
+              values:
+                - b9b0d34d-baf2-4133-b521-b6aef2d726cf # Members
+          elementType: craft\elements\User
+          fieldContext: global
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 49fc6c84-8731-4ae6-802c-72d3c0a2e2b8 # Photo
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 4a9bb145-53df-475c-8a1b-ed09040688fd
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: e33a24b1-fd2c-4071-99ee-f1da534924c6 # Order Number
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 45d8f94e-b4d2-4e13-aaa8-587ac9a75b7d
+        userCondition: null
+        warning: null
+        width: 100
+    name: Content
+    uid: b6b9c42a-250f-4322-b0ec-95f44ae68fb6
+    userCondition: null
+thumbFieldKey: null

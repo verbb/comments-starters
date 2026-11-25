@@ -1,0 +1,33 @@
+{#
+ # Who's signed in, and one-click sign-in as the seeded people. Members sign in to Craft itself, because
+ # Comments never handles passwords. These pages are on Craft's own domain (sign-in tier 1), so Craft's
+ # session cookie is all the thread needs.
+ #}
+{# The seeded moderator only signs in locally, so a public demo's comments can't be moderated by anyone. #}
+{% set demoAccounts = {
+    priya: 'Priya, a member',
+} | merge(craft.app.env == 'dev' ? { sam: 'Sam, a moderator' } : {}) %}
+
+<div class="flex flex-wrap items-center gap-2 text-sm">
+    {% if currentUser %}
+        <span class="text-slate-600">Signed in as <strong class="text-slate-900">{{ currentUser.friendlyName }}</strong></span>
+        <form method="post" class="inline" data-turbo="false">
+            {{ csrfInput() }}
+            {{ actionInput('users/logout') }}
+            {{ redirectInput(craft.app.request.absoluteUrl) }}
+            <button type="submit" class="starter-button">Sign out</button>
+        </form>
+    {% else %}
+        <span class="text-slate-600">Reading as a guest. Sign in as</span>
+        {% for username, label in demoAccounts %}
+            <form method="post" class="inline" data-turbo="false">
+                {{ csrfInput() }}
+                {{ actionInput('users/login') }}
+                {{ redirectInput(craft.app.request.absoluteUrl) }}
+                {{ hiddenInput('loginName', username) }}
+                {{ hiddenInput('password', 'password') }}
+                <button type="submit" class="starter-button">{{ label }}</button>
+            </form>
+        {% endfor %}
+    {% endif %}
+</div>

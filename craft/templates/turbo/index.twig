@@ -1,0 +1,2 @@
+{# Each post is a page of its own under /turbo, so the starter opens on the first. #}
+{% redirect url('turbo/' ~ (craft.entries.section('blog').orderBy('postDate desc').one().slug ?? '')) %}

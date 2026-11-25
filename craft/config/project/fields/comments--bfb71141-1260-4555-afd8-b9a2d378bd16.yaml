@@ -1,0 +1,12 @@
+columnSuffix: null
+handle: comments
+instructions: null
+name: Comments
+searchable: false
+settings:
+  showSummary: true
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: verbb\comments\fields\CommentsField
+warning: null

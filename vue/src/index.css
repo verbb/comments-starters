@@ -1,0 +1,56 @@
+/* Tailwind styles this app's own pages. Comments' stylesheet goes in a layer below Tailwind's
+   utilities, so a utility class always wins over it, and Editor's styles come with it for rich
+   comments. */
+@layer theme, base, comments, components, utilities;
+
+@import 'tailwindcss';
+@import '@verbb/comments-browser/css/comments.css' layer(comments);
+@import '@verbb/editor/styles' layer(comments);
+
+@layer base {
+    body {
+        @apply bg-white text-slate-900 antialiased;
+    }
+}
+
+/*
+ * The code drawer slides in from the right as its backdrop fades in, and back out when it closes.
+ * `@starting-style` gives the open dialog somewhere to start from, and transitioning `display` and
+ * `overlay` keeps it on screen while it slides out.
+ */
+@layer components {
+    .starter-drawer {
+        transform: translateX(100%);
+        transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), overlay 300ms allow-discrete, display 300ms allow-discrete;
+    }
+
+    .starter-drawer[open] {
+        transform: translateX(0);
+    }
+
+    .starter-drawer::backdrop {
+        background-color: rgb(15 23 42 / 0);
+        transition: background-color 300ms ease, overlay 300ms allow-discrete, display 300ms allow-discrete;
+    }
+
+    .starter-drawer[open]::backdrop {
+        background-color: rgb(15 23 42 / 0.3);
+    }
+
+    @starting-style {
+        .starter-drawer[open] {
+            transform: translateX(100%);
+        }
+
+        .starter-drawer[open]::backdrop {
+            background-color: rgb(15 23 42 / 0);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .starter-drawer,
+        .starter-drawer::backdrop {
+            transition: none;
+        }
+    }
+}

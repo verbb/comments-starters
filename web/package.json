@@ -1,0 +1,25 @@
+{
+  "name": "comments-starter-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "typecheck": "tsc -p tsconfig.json",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@verbb/comments-browser": "4.0.0",
+    "@verbb/comments-core": "4.0.0",
+    "@verbb/comments-web-components": "4.0.0",
+    "@verbb/editor": "^1.0.0",
+    "shiki": "4.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.5",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3",
+    "vite": "8.3.8"
+  }
+}

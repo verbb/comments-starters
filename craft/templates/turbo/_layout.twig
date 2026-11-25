@@ -1,0 +1,17 @@
+{#
+ # Turbo Drive for every page under /turbo, with Turbo 8's morphing page refresh. Comments' script stops
+ # its threads before Turbo caches a page and starts the ones on the page Turbo shows next.
+ #}
+{% extends '_starter' %}
+{% set starter = { name: 'Turbo', logo: 'turbo', files: ['turbo/_post.twig', 'turbo/_layout.twig'] } %}
+
+{% block head %}
+    {{ parent() }}
+    <meta name="turbo-refresh-method" content="morph">
+    <meta name="turbo-refresh-scroll" content="preserve">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.23/dist/turbo.es2017-esm.js"></script>
+{% endblock %}
+
+{% block about %}
+    These pages navigate with Turbo Drive, which swaps the page’s body without a full reload. Move between posts, go back and forward, and refresh a post with Turbo 8’s morph. The thread is marked <code>data-turbo-permanent</code>, so the morph leaves it drawn.
+{% endblock %}

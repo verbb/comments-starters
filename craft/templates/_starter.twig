@@ -1,0 +1,168 @@
+{#
+ # A Craft-rendered starter's page, laid out as every starter is: the demo on the left, and on the
+ # right what the starter shows, its code, the thread's events and how to run it. The code drawer
+ # shows the templates in `starter.files` with `source()`, so what's shown is what runs.
+ #
+ # Blocks: `demo` for the posts and the thread, and `about` for a sentence or two on what the starter
+ # shows.
+ #}
+{% extends '_layout' %}
+
+{% block head %}
+    {{ parent() }}
+    {#
+     # In the head, so it runs once even where Turbo swaps the body, and listening on the document, so
+     # it outlives the parts of the page Sprig and Datastar replace. Comments' `comments:*` events
+     # bubble up from each thread.
+     #}
+    <script>
+        if (!window.startersShell) {
+            window.startersShell = true;
+
+            const describe = {
+                'comments:comment-created': (detail) => `Posted a comment (${detail.moderationState})`,
+                'comments:vote-changed': (detail) => detail.vote ? `Voted ${detail.vote}` : 'Took a vote back',
+                'comments:follow-changed': (detail) => detail.following ? 'Following the discussion' : 'Stopped following',
+            };
+
+            for (const [name, line] of Object.entries(describe)) {
+                document.addEventListener(name, (event) => {
+                    const list = document.getElementById('starter-events');
+
+                    if (!list) {
+                        return;
+                    }
+
+                    list.querySelector('[data-empty]')?.remove();
+                    const item = document.createElement('li');
+                    item.textContent = line(event.detail);
+                    list.prepend(item);
+
+                    // Keep the last five.
+                    while (list.children.length > 5) {
+                        list.lastElementChild.remove();
+                    }
+                });
+            }
+
+            // Shiki colours the code, loaded from a CDN the first time the drawer opens, as Tailwind is,
+            // so the page itself stays small and the plain source shows until it's ready.
+            const highlight = async (dialog) => {
+                const codes = [...dialog.querySelectorAll('[data-code-panel] code:not([data-source])')];
+
+                if (!codes.length) {
+                    return;
+                }
+
+                try {
+                    const { codeToHtml } = await import('https://esm.sh/shiki@4.5.0');
+
+                    for (const code of codes) {
+                        // Copy takes the plain source, since the coloured lines break with <br>.
+                        code.dataset.source = code.textContent;
+                        code.innerHTML = await codeToHtml(code.textContent, { lang: 'twig', theme: 'github-dark', structure: 'inline' });
+                    }
+                } catch {
+                    // The plain source stays.
+                }
+            };
+
+            // The code drawer. Listening on the document keeps it working where Turbo swaps the body.
+            document.addEventListener('click', async (event) => {
+                const dialog = document.getElementById('code-drawer');
+
+                if (!dialog) {
+                    return;
+                }
+
+                if (event.target.closest('[data-code-open]')) {
+                    dialog.showModal();
+                    highlight(dialog);
+                } else if (event.target.closest('[data-code-close]') || event.target === dialog) {
+                    // A click on the backdrop lands on the dialog itself, outside its panel.
+                    dialog.close();
+                } else if (event.target.closest('[data-code-file]')) {
+                    const index = event.target.closest('[data-code-file]').dataset.codeFile;
+
+                    for (const button of dialog.querySelectorAll('[data-code-file]')) {
+                        button.setAttribute('aria-current', String(button.dataset.codeFile === index));
+                    }
+
+                    for (const panel of dialog.querySelectorAll('[data-code-panel]')) {
+                        panel.hidden = panel.dataset.codePanel !== index;
+                    }
+                } else if (event.target.closest('[data-code-copy]')) {
+                    const button = event.target.closest('[data-code-copy]');
+                    const code = button.closest('[data-code-panel]').querySelector('code');
+                    await navigator.clipboard.writeText(code.dataset.source ?? code.textContent);
+                    button.textContent = 'Copied';
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                    }, 1500);
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-10 *:min-w-0 lg:grid-cols-[minmax(0,1fr)_16rem]">
+        <div class="min-w-0">
+            {% block demo %}{% endblock %}
+        </div>
+
+        <aside class="text-sm lg:sticky lg:top-6 lg:self-start">
+            <p class="text-slate-600">{% block about %}{% endblock %}</p>
+
+            <section class="mt-8">
+                <h2 class="font-semibold">Code</h2>
+                <p class="mt-1 text-slate-500">The {{ starter.files|length }} {{ starter.files|length == 1 ? 'template' : 'templates' }} behind this page, as they run.</p>
+                <button type="button" data-code-open class="starter-button mt-3 gap-2"><span aria-hidden="true" class="font-mono text-xs text-slate-500">&lt;/&gt;</span> View the code</button>
+            </section>
+
+            <section class="mt-8">
+                <h2 class="font-semibold">Events</h2>
+                <p class="mt-1 text-slate-500">What the thread tells the page, through its <code>comments:*</code> events.</p>
+                <ol id="starter-events" class="mt-3 space-y-1 text-slate-700" aria-live="polite">
+                    <li data-empty class="text-slate-400">Nothing yet. Vote or comment.</li>
+                </ol>
+            </section>
+
+            <section class="mt-8">
+                <h2 class="font-semibold">Run it locally</h2>
+                <p class="mt-1 text-slate-500">From the <code>craft</code> folder, with the site installed as the README describes:</p>
+                <pre class="mt-3 overflow-x-auto rounded-lg bg-slate-100 p-3 text-xs leading-5 text-slate-700">ddev start</pre>
+            </section>
+        </aside>
+    </div>
+
+    {# The code drawer, a native <dialog>, which gives the focus trap, Escape to close and the backdrop. #}
+    <dialog id="code-drawer" aria-labelledby="code-drawer-title" class="fixed inset-y-0 right-0 left-auto m-0 h-full max-h-none w-full max-w-[min(64rem,92vw)] border-l border-slate-200 bg-white p-0 text-slate-900 shadow-2xl starter-drawer max-md:max-w-none">
+        <div class="flex h-full flex-col">
+            <div class="flex items-center justify-between gap-4 border-b border-slate-200 px-5 py-3">
+                <h2 id="code-drawer-title" class="font-semibold">Code for {{ starter.name }}</h2>
+                <button type="button" data-code-close autofocus class="starter-button">Close</button>
+            </div>
+            <div class="grid min-h-0 flex-1 md:grid-cols-[14rem_minmax(0,1fr)]">
+                <nav aria-label="Files" class="flex gap-1 overflow-x-auto border-b border-slate-200 bg-slate-50 p-3 md:flex-col md:border-r md:border-b-0">
+                    {% for file in starter.files %}
+                        <button type="button" data-code-file="{{ loop.index0 }}" aria-current="{{ loop.first ? 'true' : 'false' }}" class="starter-file">{{ file }}</button>
+                    {% endfor %}
+                </nav>
+                {% for file in starter.files %}
+                    <div data-code-panel="{{ loop.index0 }}" class="flex min-h-0 min-w-0 flex-col" {{ not loop.first ? 'hidden' }}>
+                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-2 text-xs text-slate-500">
+                            <span class="font-mono">craft/templates/{{ file }}</span>
+                            <span class="flex gap-4">
+                                <a href="https://github.com/verbb/comments-starters/blob/main/craft/templates/{{ file }}" target="_blank" rel="noreferrer" class="text-indigo-700 hover:underline">View on GitHub</a>
+                                <button type="button" data-code-copy class="hover:text-slate-900">Copy</button>
+                            </span>
+                        </div>
+                        {# `source()` is marked safe, so it skips autoescaping. `e` makes the template text, not markup. #}
+                        <pre class="min-h-0 flex-1 overflow-auto bg-slate-950 p-4 text-[13px] leading-6 text-slate-100"><code>{{ source(file)|e }}</code></pre>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </dialog>
+{% endblock %}

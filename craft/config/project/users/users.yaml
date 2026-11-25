@@ -1,0 +1,6 @@
+allowPublicRegistration: false
+defaultGroup: null
+photoSubpath: 'people/{id}'
+photoVolumeUid: ccdc8e59-e702-4e28-badf-6166bfbebbac # Comment Photos
+require2fa: false
+requireEmailVerification: true

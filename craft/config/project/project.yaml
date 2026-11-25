@@ -1,0 +1,35 @@
+dateModified: 1794975385
+email:
+  fromEmail: admin@example.test
+  fromName: 'Comments Starters'
+  transportType: craft\mail\transportadapters\Sendmail
+fs:
+  commentPhotos:
+    hasUrls: true
+    name: 'Comment Photos'
+    settings:
+      path: '@webroot/uploads/comment-photos'
+    type: craft\fs\Local
+    url: '@web/uploads/comment-photos'
+meta:
+  __names__:
+    2d60ab8d-eb5b-4819-993f-b09bcbae1eca: 'Reading From' # Reading From
+    2fc368ec-7024-4f41-8073-06aa649de212: Post # Post
+    3e198438-2edc-4317-8dfc-171bbc7466fc: 'Comments Starters' # Comments Starters
+    6da5eda5-51bf-43af-8147-86a2a4114b1a: Rating # Rating
+    49fc6c84-8731-4ae6-802c-72d3c0a2e2b8: Photo # Photo
+    70681a72-1fe5-4cfd-94ad-800fc799d6c8: Buyers # Buyers
+    42686196-6d0d-4f19-8fba-04fa5883f6e0: Blog # Blog
+    b9b0d34d-baf2-4133-b521-b6aef2d726cf: Members # Members
+    bd837f6b-0851-4242-8b16-66cde21a84cc: Body # Body
+    bfb71141-1260-4555-afd8-b9a2d378bd16: Comments # Comments
+    ccdc8e59-e702-4e28-badf-6166bfbebbac: 'Comment Photos' # Comment Photos
+    d42668a0-c5dc-437e-93c4-b3f919f0c842: Moderators # Moderators
+    e33a24b1-fd2c-4071-99ee-f1da534924c6: 'Order Number' # Order Number
+    ee77ecda-4f56-4483-8c1e-0d38192d5892: 'Comments Starters' # Comments Starters
+system:
+  edition: pro
+  live: true
+  name: 'Comments Starters'
+  schemaVersion: 5.12.0.2
+  timeZone: America/Los_Angeles

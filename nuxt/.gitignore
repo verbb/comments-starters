@@ -1,0 +1,7 @@
+# The dev server's mkcert certificate, made by `npm run dev`.
+.certs
+
+# Nuxt's caches, alongside the repository's own ignores.
+.data
+.nitro
+.cache

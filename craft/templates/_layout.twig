@@ -1,0 +1,139 @@
+{#
+ # Shared page for the Craft-rendered starters. Tailwind's browser build styles the starter's own
+ # chrome, and nothing here styles the thread, which brings its own CSS with `craft.comments.render()`.
+ #
+ # Every starter, here and in the front-end frameworks, uses the same chrome: the Comments mark and
+ # name linking home, the starter's own mark beside it, sign-in on the right and the Verbb footer.
+ # A starter page sets `starter` to `{ name, logo, files }`, where `logo` names a file in web/logos.
+ # `_starter.twig` shows the `files` in its code drawer.
+ #}
+<!DOCTYPE html>
+<html lang="{{ craft.app.language }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ pageTitle is defined ? pageTitle ~ ' · ' }}{{ siteName }}</title>
+    <link rel="icon" href="{{ siteUrl }}favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.5"></script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-white text-slate-900 antialiased;
+            }
+        }
+
+        @layer components {
+            .starter-card {
+                @apply block rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-indigo-300 hover:shadow-sm;
+            }
+
+            .starter-tag {
+                @apply inline-flex shrink-0 items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600;
+            }
+
+            .starter-logo {
+                @apply inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white;
+            }
+
+            .starter-button {
+                @apply inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100;
+            }
+
+            /* A choice between posts, as buttons or as links to each post's page. */
+            .starter-pill {
+                @apply inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 hover:border-slate-300;
+            }
+
+            .starter-pill[aria-pressed=true],
+            .starter-pill[aria-current=page] {
+                @apply border-indigo-300 bg-indigo-50 text-indigo-900;
+            }
+
+            .starter-file {
+                @apply shrink-0 rounded-md px-2 py-1.5 text-left font-mono text-xs break-all text-slate-600 hover:text-slate-900;
+            }
+
+            .starter-file[aria-current=true] {
+                @apply bg-white font-semibold text-slate-900 ring-1 ring-slate-200;
+            }
+        }
+
+        /*
+         * The code drawer slides in from the right as its backdrop fades in, and back out when it closes.
+         * `@starting-style` gives the open dialog somewhere to start from, and transitioning `display` and
+         * `overlay` keeps it on screen while it slides out.
+         */
+        @layer components {
+            .starter-drawer {
+                transform: translateX(100%);
+                transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), overlay 300ms allow-discrete, display 300ms allow-discrete;
+            }
+
+            .starter-drawer[open] {
+                transform: translateX(0);
+            }
+
+            .starter-drawer::backdrop {
+                background-color: rgb(15 23 42 / 0);
+                transition: background-color 300ms ease, overlay 300ms allow-discrete, display 300ms allow-discrete;
+            }
+
+            .starter-drawer[open]::backdrop {
+                background-color: rgb(15 23 42 / 0.3);
+            }
+
+            @starting-style {
+                .starter-drawer[open] {
+                    transform: translateX(100%);
+                }
+
+                .starter-drawer[open]::backdrop {
+                    background-color: rgb(15 23 42 / 0);
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .starter-drawer,
+                .starter-drawer::backdrop {
+                    transition: none;
+                }
+            }
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-3 px-6 py-4">
+            <a href="{{ siteUrl }}" class="flex items-center gap-2.5 text-lg font-semibold">
+                <img src="{{ siteUrl }}logos/comments.svg" alt="" class="size-7">
+                Comments Starters
+            </a>
+
+            {% if starter is defined %}
+                <svg viewBox="0 0 16 16" class="size-4 text-slate-300" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+                <span class="flex items-center gap-2 text-lg font-semibold">
+                    <img src="{{ siteUrl }}logos/{{ starter.logo }}.svg" alt="" class="size-5">
+                    {{ starter.name }}
+                </span>
+
+            {% endif %}
+
+            <div class="ml-auto">
+                {% include '_partials/account' %}
+            </div>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-6 py-10">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 border-t border-slate-200 px-6 py-8 text-sm text-slate-500">
+        <span>Comments {{ craft.app.plugins.getPlugin('comments').version }} on Craft {{ craft.app.version }}.</span>
+        <a href="https://verbb.io" class="opacity-80 hover:opacity-100">
+            <img src="{{ siteUrl }}logos/verbb.svg" alt="Verbb" class="h-4 w-auto">
+        </a>
+    </footer>
+</body>
+</html>

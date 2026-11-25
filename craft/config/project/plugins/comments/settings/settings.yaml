@@ -1,0 +1,8 @@
+allowAttachments: true
+allowGuestFieldUploads: true
+attachmentVolumeId: 1
+interactionMode: updown
+moderatorUserGroup: d42668a0-c5dc-437e-93c4-b3f919f0c842 # Moderators
+staffBadgeGroups:
+  - d42668a0-c5dc-437e-93c4-b3f919f0c842 # Moderators
+staffBadgeLabel: Team

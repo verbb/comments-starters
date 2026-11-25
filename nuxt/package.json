@@ -1,0 +1,30 @@
+{
+  "name": "comments-starter-nuxt",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@verbb/comments-browser": "4.0.0",
+    "@verbb/comments-core": "4.0.0",
+    "@verbb/comments-vue": "4.0.0",
+    "@verbb/editor": "^1.0.0",
+    "nuxt": "4.6.4",
+    "shiki": "4.5.0",
+    "vue": "3.5.45"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.5",
+    "@types/node": "22.20.5",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3",
+    "vue-tsc": "3.3.14"
+  }
+}

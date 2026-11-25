@@ -1,0 +1,26 @@
+{# The posts sit inside the patched element, so a patch also moves which one is marked as chosen. #}
+{% set posts = posts ?? craft.entries.section('blog').orderBy('postDate desc').all() %}
+
+<div id="datastar-post">
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Posts">
+        {% for post in posts %}
+            <button type="button" class="starter-pill" aria-pressed="{{ post.id == entry.id ? 'true' : 'false' }}" data-on:click="{{ datastar.get('datastar/_patch', { slug: post.slug }) }}">{{ post.title }}</button>
+        {% endfor %}
+    </div>
+
+    <article class="mt-8">
+        <h1 class="text-3xl font-semibold tracking-tight">{{ entry.title }}</h1>
+        <p class="mt-1 text-sm text-slate-500">Patched from the server at {{ now|date('H:i:s') }}</p>
+        <div class="mt-6 space-y-4 text-lg leading-8 text-slate-700">{{ entry.body|md }}</div>
+
+        <p class="mt-6">
+            <button type="button" class="starter-button" data-on:click="{{ datastar.get('datastar/_patch', { slug: entry.slug }) }}">Refresh from the server</button>
+        </p>
+
+        {# Datastar's morph skips an element with `data-ignore-morph` when the new HTML has one with the same
+           id. The id names the post, so another post's thread replaces this one. #}
+        <div id="datastar-thread-{{ entry.id }}" data-ignore-morph class="mt-12">
+            {{ craft.comments.render(entry) }}
+        </div>
+    </article>
+</div>

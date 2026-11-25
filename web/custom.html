@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your own interface · Comments Web Components Starter</title>
+    <script>
+      // Set the theme before the page draws, so it doesn't flash light first.
+      try {
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch {}
+    </script>
+  </head>
+  <body data-page="custom">
+    <!-- The chrome every starter shares: the Comments mark linking home, this starter's mark, and the
+         page's own controls on the right. -->
+    <header class="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <div class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-3 px-6 py-4">
+        <a id="starters-home" href="/" class="flex items-center gap-2.5 text-lg font-semibold">
+          <svg viewBox="0 0 544.2 544.2" class="size-7" aria-hidden="true">
+            <g fill="#ffa515">
+          <path d="M272.9 229.4c-12.2 0-22.2 10-22.2 22.2s10 22.2 22.2 22.2 22.2-10 22.2-22.2-10-22.2-22.2-22.2zM193.2 229.4c-12.2 0-22.2 10-22.2 22.2s10 22.2 22.2 22.2c12.9 0 23-10.1 22.2-22.2 0-12.2-10-22.2-22.2-22.2z"></path>
+          <path d="M272.1 0C2.1 0 0 121.8 0 272.1s2.1 272.1 272.1 272.1 272.1-121.8 272.1-272.1S542.1 0 272.1 0zm15.8 379.4c-16.5 2.2-31.5 2.2-46.6 0-52.4 53.8-107.7 43-96.9 34.4 26.6-20.8 32.3-40.2 30.9-56-34.5-20.1-58.9-51-63.2-88.3-8.6-70.4 56.7-135 145-145 88.3-9.3 167.2 39.5 175.1 109.8 7.9 70.4-56.7 134.9-144.3 145.1z"></path>
+          <path d="M352.5 229.4c-12.2 0-22.2 10-22.2 22.2s10 22.2 22.2 22.2 22.3-10.1 22.2-22.2c0-12.2-10-22.2-22.2-22.2z"></path>
+            </g>
+          </svg>
+          Comments Starters
+        </a>
+        <svg viewBox="0 0 16 16" class="size-4 text-slate-300 dark:text-slate-600" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+        <span class="flex items-center gap-2 text-lg font-semibold">
+          <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true"><path fill="#2a7ae2" d="M11.731 2.225l-.01.016H5.618L0 11.979l5.618 9.736h12.8l.04.06 2.134-3.735.518-.893h-.008l.008-.014-.626-.75h.895l.006-.01.008.01L24 11.994l-2.607-4.39-.003.005-.011-.02h-.945l.63-.763-2.606-4.57-.006.01-.024-.04H11.73zM9.107 6.824h6.19l-.53.764h-.023l2.398 4.015h.875l-.277.328.357.435h-.956l-2.398 4.015h.027l.523.764H9.074l-2.99-5.168 3.022-5.155z"></path></svg>
+          Web Components
+        </span>
+        <button type="button" id="theme-toggle" class="btn btn-secondary ml-auto" aria-pressed="false">Dark mode</button>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-6 py-10">
+      <!-- The two pages: the thread Comments draws, and the same thread drawn by this page's own code. -->
+      <nav aria-label="Pages" class="mb-8 flex flex-wrap gap-x-6 border-b border-slate-200 dark:border-slate-800">
+        <a href="./" class="starter-tab">The thread</a>
+        <a href="./custom.html" aria-current="page" class="starter-tab">Your own interface</a>
+      </nav>
+      <div class="grid grid-cols-[minmax(0,1fr)] gap-10 *:min-w-0 lg:grid-cols-[minmax(0,1fr)_16rem]">
+        <div class="min-w-0">
+          <div id="posts" role="group" aria-label="Posts" class="flex flex-wrap gap-2"></div>
+          <h1 id="post-title" class="mt-8 text-3xl font-semibold tracking-tight"></h1>
+
+          <!-- custom.ts draws the thread here with the page's own markup. -->
+          <div id="discussion"></div>
+        </div>
+
+        <aside class="text-sm lg:sticky lg:top-6 lg:self-start">
+          <p class="text-slate-600 dark:text-slate-400">
+            The same thread drawn with the page's own markup and no framework, from
+            <code>@verbb/comments-core</code>'s thread store, and posted from the page's own forms with
+            <code>commentForm()</code>, which mounts the site's spam protection on them. Comments gives
+            the state and actions, and none of its markup.
+          </p>
+
+          <section class="mt-8">
+            <h2 class="font-semibold">Code</h2>
+            <p class="mt-1 text-slate-500 dark:text-slate-400">The 4 files behind this page, as they run.</p>
+            <button type="button" id="code-open" class="btn btn-secondary mt-3"><span aria-hidden="true" class="font-mono text-xs text-slate-500 dark:text-slate-400">&lt;/&gt;</span> View the code</button>
+          </section>
+
+          <section class="mt-8">
+            <h2 class="font-semibold">Run it locally</h2>
+            <p class="mt-1 text-slate-500 dark:text-slate-400">With the Craft site and packages installed as the README describes:</p>
+            <pre class="mt-3 overflow-x-auto rounded-lg bg-slate-100 p-3 text-xs leading-5 text-slate-700 dark:bg-slate-800 dark:text-slate-300">npm run dev --prefix web</pre>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 border-t border-slate-200 px-6 py-8 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+      <span>Drawn with <code>@verbb/comments-core</code> and <code>@verbb/comments-browser/form</code>.</span>
+      <a href="https://verbb.io" aria-label="Verbb" class="text-slate-300 hover:text-slate-400 dark:text-slate-600 dark:hover:text-slate-500">
+        <svg viewBox="0 0 148 33" class="h-4 w-auto" aria-hidden="true"><path fill="currentColor" d="M49.508.392c-8.65 0-15.328 6.724-17.34 12.974C28.904 23.498 35.4 32.32 45.194 32.32c6.057 0 11.377-2.498 14.52-5.642 1.332-1.33.486-2.157-.53-2.685-.558-.29-2.22-1.125-2.22-1.125-.9-.46-2.062-.523-3.046.045-1.405.807-2.765 2.148-7.704 2.148-3.972 0-6.907-2.673-7.443-6.308 0 0 16.407-.055 22.168-.055 1.93 0 2.62-1.572 2.62-4.48 0-8.3-6.138-13.825-14.052-13.825zM39.73 13.326c1.7-3.31 5.194-5.676 8.933-5.676 3.737 0 6.564 2.367 7.333 5.676H39.73zM32.706.953c1.236 0 1.86 1.055 1.295 2.265L20.623 29.532c-.68 1.34-2.08 2.228-3.506 2.228h-5.835c-1.236 0-2.23-.777-2.48-1.942L3.558 5.584H1.707c-.594 0-1.08-.358-1.233-.908L.01 2.994c-.27-.97.594-2.04 1.647-2.04h7.98c1.12 0 2.01.726 2.194 1.796l3.596 20.798L25.604 2.574c.472-.97 1.476-1.62 2.502-1.62h4.6zm107.615.03c4.638.333 7.803 4.197 7.133 8.968-.324 2.31-1.51 4.395-3.16 5.99 1.64 1.678 2.505 4.09 2.124 6.805-.71 5.056-5.387 9.09-10.44 9.09l-14.02-.04c-1.012-.003-1.716-.825-1.574-1.838l.026-.19c1.723-2.055 2.922-4.48 3.298-7.17.357-2.523-.07-4.977-1.183-7.053 1.172-1.77 1.94-3.735 2.22-5.74.3-2.137.03-4.156-.686-5.93l.14-1.01c.15-1.072 1.145-1.94 2.217-1.938l13.903.057zm-1.477 21.303c.256-1.82-.735-3.29-2.212-3.307l.003-.006h-7.025l-.932 6.627 7.025-.005c1.484-.015 2.887-1.487 3.143-3.31zm1.746-12.11c.262-1.884-.74-3.414-2.24-3.414h-7.026l-.96 6.827h7.024c1.502 0 2.936-1.53 3.2-3.414zM113.194.956c4.638.334 7.803 4.198 7.133 8.967-.324 2.31-1.51 4.395-3.16 5.992 1.64 1.676 2.504 4.09 2.124 6.803-.71 5.057-5.387 9.09-10.44 9.09l-14.02-.04c-1.012-.003-1.716-.825-1.574-1.838l3.818-27.093C97.226 1.767 98.214.9 99.284.9h.008l13.903.057zm-1.477 21.304c.256-1.82-.735-3.292-2.212-3.307l.002-.006h-7.025l-.932 6.627 7.026-.006c1.483-.015 2.886-1.486 3.142-3.308zm1.746-12.11c.263-1.885-.738-3.415-2.24-3.415H104.2l-.96 6.828h7.023c1.502 0 2.936-1.53 3.2-3.413zm-21.2-1.44c0 4.94-4.24 9.76-9.49 9.76l7 10.615c1.154 1.872.094 2.66-1.446 2.66l-4.3.01c-1.303 0-2.643-1.024-3.388-2.357l-5.424-10.504h-1.15L72.59 29.398c-.183 1.3-1.385 2.358-2.688 2.358h-3.266c-1.3 0-2.208-1.057-2.024-2.358L68.28 3.305c.18-1.3 1.385-2.358 2.686-2.358h13.66l-.005.017c4.87.087 7.645 3.852 7.645 7.745zm-8.226 1.368c.265-1.887-.737-3.415-2.24-3.415h-6.012l-.96 6.828h6.013c1.5 0 2.933-1.528 3.198-3.412z"></path></svg>
+      </a>
+    </footer>
+
+    <!-- The code drawer, opened from the aside. starter.ts fills it with this page's files. -->
+    <dialog id="code-drawer" aria-labelledby="code-drawer-title" class="fixed inset-y-0 right-0 left-auto m-0 h-full max-h-none w-full max-w-[min(64rem,92vw)] border-l border-slate-200 bg-white p-0 text-slate-900 shadow-2xl starter-drawer max-md:max-w-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100">
+      <div class="flex h-full flex-col">
+        <div class="flex items-center justify-between gap-4 border-b border-slate-200 px-5 py-3 dark:border-slate-800">
+          <h2 id="code-drawer-title" class="font-semibold">Code for this page</h2>
+          <button type="button" data-close autofocus class="btn btn-secondary">Close</button>
+        </div>
+        <div class="grid min-h-0 flex-1 md:grid-cols-[14rem_minmax(0,1fr)]">
+          <nav aria-label="Files" data-files class="flex gap-1 overflow-x-auto border-b border-slate-200 bg-slate-50 p-3 md:flex-col md:border-r md:border-b-0 dark:border-slate-800 dark:bg-slate-950"></nav>
+          <div class="flex min-h-0 min-w-0 flex-col">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-2 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
+              <span data-path class="font-mono"></span>
+              <span class="flex gap-4">
+                <a data-github target="_blank" rel="noreferrer" class="text-indigo-700 hover:underline dark:text-indigo-300">View on GitHub</a>
+                <button type="button" data-copy class="hover:text-slate-900 dark:hover:text-slate-100">Copy</button>
+              </span>
+            </div>
+            <pre class="min-h-0 flex-1 overflow-auto bg-slate-950 p-4 text-[13px] leading-6 text-slate-100"><code data-source></code></pre>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <script type="module" src="/src/custom.ts"></script>
+  </body>
+</html>

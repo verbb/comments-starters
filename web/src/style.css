@@ -1,0 +1,113 @@
+/*
+ * Comments' stylesheet sits in its own layer, below Tailwind's components and utilities, so anything
+ * here wins over it without needing more specific selectors. Editor's styles, for rich comments, go
+ * in the same layer.
+ */
+@layer theme, base, comments, components, utilities;
+
+@import 'tailwindcss';
+@import '@verbb/comments-browser/css/comments.css' layer(comments);
+@import '@verbb/editor/styles' layer(comments);
+
+/* Tailwind's dark: variant follows the `dark` class the toggle puts on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+    body {
+        @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+    }
+}
+
+@layer components {
+    /* The site's own buttons and fields, which `themeConfig` puts on Comments' controls too. */
+    .btn {
+        @apply inline-flex items-center justify-center gap-1.5 rounded-lg border border-transparent px-3 py-1.5 text-sm font-medium transition disabled:opacity-50;
+    }
+
+    .btn-primary {
+        @apply bg-indigo-600 text-white hover:bg-indigo-500;
+    }
+
+    .btn-secondary {
+        @apply border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800;
+    }
+
+    .field {
+        @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-indigo-900;
+    }
+
+    /* The starters' own chrome: choosing a post, the two pages, and the files in the code drawer. */
+    .starter-pill {
+        @apply rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 hover:border-slate-300 aria-pressed:border-indigo-300 aria-pressed:bg-indigo-50 aria-pressed:text-indigo-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:aria-pressed:border-indigo-700 dark:aria-pressed:bg-indigo-950 dark:aria-pressed:text-indigo-100;
+    }
+
+    .starter-tab {
+        @apply -mb-px border-b-2 border-transparent pb-3 text-sm text-slate-500 hover:text-slate-900 aria-[current=page]:border-slate-900 aria-[current=page]:font-semibold aria-[current=page]:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 dark:aria-[current=page]:border-slate-100 dark:aria-[current=page]:text-slate-100;
+    }
+
+    .starter-file {
+        @apply shrink-0 rounded-md px-2 py-1.5 text-left font-mono text-xs break-all text-slate-600 hover:text-slate-900 aria-[current=true]:bg-white aria-[current=true]:font-semibold aria-[current=true]:text-slate-900 aria-[current=true]:ring-1 aria-[current=true]:ring-slate-200 dark:text-slate-400 dark:hover:text-slate-100 dark:aria-[current=true]:bg-slate-900 dark:aria-[current=true]:text-slate-100 dark:aria-[current=true]:ring-slate-700;
+    }
+
+    /*
+     * The thread, through the stable class names Comments documents. These change the look and leave
+     * the structure to Comments.
+     */
+    .comments__author-name {
+        @apply text-indigo-700 dark:text-indigo-300;
+    }
+
+    .comments__badge {
+        @apply rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300;
+    }
+
+    .comments__badge--verified {
+        @apply bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300;
+    }
+
+    .comments__replies {
+        @apply border-indigo-100 dark:border-indigo-900;
+    }
+}
+
+/*
+ * The code drawer slides in from the right as its backdrop fades in, and back out when it closes.
+ * `@starting-style` gives the open dialog somewhere to start from, and transitioning `display` and
+ * `overlay` keeps it on screen while it slides out.
+ */
+@layer components {
+    .starter-drawer {
+        transform: translateX(100%);
+        transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), overlay 300ms allow-discrete, display 300ms allow-discrete;
+    }
+
+    .starter-drawer[open] {
+        transform: translateX(0);
+    }
+
+    .starter-drawer::backdrop {
+        background-color: rgb(15 23 42 / 0);
+        transition: background-color 300ms ease, overlay 300ms allow-discrete, display 300ms allow-discrete;
+    }
+
+    .starter-drawer[open]::backdrop {
+        background-color: rgb(15 23 42 / 0.3);
+    }
+
+    @starting-style {
+        .starter-drawer[open] {
+            transform: translateX(100%);
+        }
+
+        .starter-drawer[open]::backdrop {
+            background-color: rgb(15 23 42 / 0);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .starter-drawer,
+        .starter-drawer::backdrop {
+            transition: none;
+        }
+    }
+}

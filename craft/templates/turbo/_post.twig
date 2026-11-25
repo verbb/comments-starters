@@ -1,0 +1,33 @@
+{% extends 'turbo/_layout' %}
+
+{% set entry = craft.entries.section('blog').slug(slug).one() %}
+{% if not entry %}
+    {% exit 404 %}
+{% endif %}
+{% set pageTitle = entry.title ~ ' · Turbo' %}
+
+{% block demo %}
+    {# Links between the posts' pages, which Turbo Drive follows without a full reload. #}
+    <nav aria-label="Posts" class="flex flex-wrap gap-2">
+        {% for post in craft.entries.section('blog').orderBy('postDate desc').all() %}
+            <a href="{{ url('turbo/' ~ post.slug) }}" class="starter-pill" {{ post.id == entry.id ? 'aria-current="page"' }}>{{ post.title }}</a>
+        {% endfor %}
+    </nav>
+
+    <article class="mt-8">
+        <h1 class="text-3xl font-semibold tracking-tight">{{ entry.title }}</h1>
+        <div class="mt-6 space-y-4 text-lg leading-8 text-slate-700">{{ entry.body|md }}</div>
+
+        <p class="mt-6">
+            {# A same-URL visit with `replace` is a page refresh, which morphs with the meta tag above. #}
+            <button type="button" class="starter-button" onclick="Turbo.visit(location.href, { action: 'replace' })">Refresh with morph</button>
+        </p>
+
+        {# A morph would put the server's empty mount point back over the drawn thread. Turbo leaves an
+           element with `data-turbo-permanent` and an id alone, and the id names the post, so another
+           post's page still brings its own thread. #}
+        <div id="turbo-thread-{{ entry.id }}" data-turbo-permanent class="mt-12">
+            {{ craft.comments.render(entry) }}
+        </div>
+    </article>
+{% endblock %}

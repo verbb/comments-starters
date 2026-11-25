@@ -1,0 +1,15 @@
+{#
+ # Sprig re-renders a component on the server and swaps it into the page with htmx. Comments' script
+ # notices the new mount point and starts its thread, and stops the thread that was swapped out.
+ #}
+{% extends '_starter' %}
+{% set pageTitle = 'Sprig' %}
+{% set starter = { name: 'Sprig', logo: 'sprig', files: ['sprig/index.twig', 'sprig/_component.twig'] } %}
+
+{% block demo %}
+    {{ sprig('sprig/_component', { slug: 'welcome-to-the-comments-starters' }) }}
+{% endblock %}
+
+{% block about %}
+    Choose a post and Sprig swaps it in, thread and all. <strong>Reload this post</strong> re-renders the component without changing post, and the thread keeps what’s typed in it because it’s marked <code>s-preserve</code>.
+{% endblock %}

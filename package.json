@@ -1,0 +1,18 @@
+{
+  "name": "comments-starters",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:apps": "npm install --prefix react && npm install --prefix vue && npm install --prefix web && npm install --prefix next && npm install --prefix nuxt",
+    "dev": "concurrently -k -n react,vue,web,next,nuxt -c blue,green,magenta,cyan,yellow \"npm run dev --prefix react\" \"npm run dev --prefix vue\" \"npm run dev --prefix web\" \"npm run dev --prefix next\" \"npm run dev --prefix nuxt\"",
+    "build": "npm run build --prefix react && npm run build --prefix vue && npm run build --prefix web && npm run build --prefix next && npm run build --prefix nuxt",
+    "build:hosted": "VITE_COMMENTS_ENDPOINT=/actions/comments/api VITE_STARTERS_URL=/ npm run build --prefix react -- --base=/react/ && VITE_COMMENTS_ENDPOINT=/actions/comments/api VITE_STARTERS_URL=/ npm run build --prefix vue -- --base=/vue/ && VITE_COMMENTS_ENDPOINT=/actions/comments/api VITE_STARTERS_URL=/ npm run build --prefix web -- --base=/web/",
+    "assemble:hosted": "npm run build:hosted && node scripts/assemble-hosted.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "check": "npm run build && npm run smoke"
+  },
+  "devDependencies": {
+    "concurrently": "9.2.1",
+    "playwright": "1.58.2"
+  }
+}

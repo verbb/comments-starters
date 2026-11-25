@@ -1,0 +1,9 @@
+baseUrl: $PRIMARY_SITE_URL
+enabled: true
+handle: default
+hasUrls: true
+language: en-US
+name: 'Comments Starters'
+primary: true
+siteGroup: 3e198438-2edc-4317-8dfc-171bbc7466fc # Comments Starters
+sortOrder: 1

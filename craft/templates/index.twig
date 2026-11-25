@@ -1,0 +1,106 @@
+{% extends '_layout' %}
+
+{% set dev = craft.app.env == 'dev' %}
+
+{# The framework starters run on their own dev servers locally, and are served from this site's
+   /react/, /vue/ and /web/ folders when hosted. Next.js and Nuxt run on servers of their own. #}
+{% set frameworks = [
+    {
+        name: 'React',
+        logo: 'react',
+        url: dev ? 'http://localhost:5273/' : '/react/',
+        tier: 'Same domain',
+        shows: 'Vite and React with <code>&lt;CommentsThread&gt;</code>, a “Verified buyer” badge drawn by a React component, stars for the rating field, and a second page built on <code>useCommentsThread()</code>.',
+    },
+    {
+        name: 'Vue',
+        logo: 'vue',
+        url: dev ? 'http://localhost:5274/' : '/vue/',
+        tier: 'Same domain',
+        shows: 'The React starter again, in Vite and Vue.',
+    },
+    {
+        name: 'Web Components',
+        logo: 'web-components',
+        url: dev ? 'http://localhost:5275/' : '/web/',
+        tier: dev ? 'Another site, guests' : 'Same domain',
+        shows: 'Vite and Tailwind with <code>&lt;verbb-comments&gt;</code>, styled through the stable class names with Comments in its own CSS layer, and a dark mode toggle.',
+    },
+    {
+        name: 'Next.js',
+        logo: 'nextjs',
+        url: dev ? 'http://localhost:3101/' : (getenv('NEXT_STARTER_URL') ?: null),
+        tier: 'Another site, member tokens',
+        shows: 'The App Router on another domain, signing members in with member tokens minted by a route handler, with the count and structured data rendered on the server.',
+    },
+    {
+        name: 'Nuxt',
+        logo: 'nuxt',
+        url: dev ? 'https://nuxt.comments-starters.ddev.site:3102/' : (getenv('NUXT_STARTER_URL') ?: null),
+        tier: 'Subdomain, shared cookie',
+        shows: 'Nuxt on a subdomain of the Craft site, sharing Craft’s session cookie through credentialed CORS.',
+    },
+] %}
+
+{# The Craft-rendered starters. Every description here holds markup, which the card prints as it is. #}
+{% set craftStarters = [
+    {
+        name: 'Default',
+        logo: 'craft',
+        url: url('blog/welcome-to-the-comments-starters'),
+        shows: 'One line of Twig, <code>craft.comments.render(entry)</code>, on an ordinary entry page.',
+    },
+    {
+        name: 'Sprig',
+        logo: 'sprig',
+        url: url('sprig'),
+        shows: 'A Sprig component that swaps between posts, starting each new thread and stopping the old one.',
+    },
+    {
+        name: 'Turbo',
+        logo: 'turbo',
+        url: url('turbo'),
+        shows: 'Turbo Drive navigation between posts, and Turbo 8’s morphing page refresh keeping the thread drawn.',
+    },
+    {
+        name: 'Datastar',
+        logo: 'datastar',
+        url: url('datastar'),
+        shows: 'Datastar morphing the page from the server, with the thread left out of the morph until the post changes.',
+    },
+] %}
+
+{% macro card(starter) %}
+    {% tag starter.url ? 'a' : 'div' with { href: starter.url, class: 'starter-card' } %}
+        <div class="flex items-center gap-3">
+            <span class="starter-logo"><img src="{{ siteUrl }}logos/{{ starter.logo }}.svg" alt="" class="size-6"></span>
+            <h3 class="font-semibold">{{ starter.name }}</h3>
+            {% if starter.tier ?? false %}
+                <span class="starter-tag ml-auto">{{ starter.tier }}</span>
+            {% endif %}
+        </div>
+        <p class="mt-3 text-sm text-slate-600">{{ starter.shows|raw }}</p>
+        {% if not starter.url %}
+            <p class="mt-2 text-sm text-slate-500">Not deployed here.</p>
+        {% endif %}
+    {% endtag %}
+{% endmacro %}
+
+{% block content %}
+    <h1 class="text-3xl font-semibold tracking-tight">Comments starters</h1>
+    <p class="mt-3 max-w-2xl text-lg text-slate-600">Examples of Comments on Craft-rendered pages and in front-end frameworks.</p>
+
+    <h2 class="mt-12 text-xl font-semibold">Craft-rendered pages</h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        {% for starter in craftStarters %}
+            {{ _self.card(starter) }}
+        {% endfor %}
+    </div>
+
+    <h2 class="mt-12 text-xl font-semibold">In front-end frameworks</h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        {% for framework in frameworks %}
+            {{ _self.card(framework) }}
+        {% endfor %}
+    </div>
+{% endblock %}

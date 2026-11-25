@@ -1,0 +1,21 @@
+defaultPlacement: end
+enableVersioning: false
+entryTypes:
+  -
+    uid: 2fc368ec-7024-4f41-8073-06aa649de212 # Post
+handle: blog
+maxAuthors: 1
+minAuthors: 1
+name: Blog
+previewTargets:
+  -
+    label: 'Primary entry page'
+    urlFormat: '{url}'
+propagationMethod: all
+siteSettings:
+  ee77ecda-4f56-4483-8c1e-0d38192d5892: # Comments Starters
+    enabledByDefault: true
+    hasUrls: true
+    template: blog/_entry
+    uriFormat: 'blog/{slug}'
+type: channel

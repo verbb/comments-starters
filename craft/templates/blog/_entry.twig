@@ -1,0 +1,32 @@
+{#
+ # The drop-in default. `craft.comments.render()` is the only thing the thread needs. It outputs the
+ # mount point and brings Comments' CSS and JavaScript, which load the thread as it nears view.
+ #}
+{% extends '_starter' %}
+{% set pageTitle = entry.title %}
+{% set starter = { name: 'Default', logo: 'craft', files: ['blog/_entry.twig'] } %}
+
+{% block demo %}
+    <nav aria-label="Posts" class="flex flex-wrap gap-2">
+        {% for post in craft.entries.section('blog').orderBy('postDate desc').all() %}
+            <a href="{{ post.url }}" class="starter-pill" {{ post.id == entry.id ? 'aria-current="page"' }}>{{ post.title }}</a>
+        {% endfor %}
+    </nav>
+
+    <article class="mt-8">
+        <p class="text-sm text-slate-500">{{ entry.postDate|date('j F Y') }}</p>
+        <h1 class="mt-1 text-3xl font-semibold tracking-tight">{{ entry.title }}</h1>
+
+        <div class="mt-6 space-y-4 text-lg leading-8 text-slate-700">
+            {{ entry.body|md }}
+        </div>
+
+        <div class="mt-12">
+            {{ craft.comments.render(entry) }}
+        </div>
+    </article>
+{% endblock %}
+
+{% block about %}
+    The drop-in default. One line of Twig outputs the thread’s mount point and brings Comments’ CSS and JavaScript, which load the thread as it nears view.
+{% endblock %}

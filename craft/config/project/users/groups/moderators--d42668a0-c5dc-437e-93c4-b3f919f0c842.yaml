@@ -1,0 +1,8 @@
+description: null
+handle: moderators
+name: Moderators
+permissions:
+  - comments-edit
+  - comments-moderate
+  - comments-trash
+  - comments-view
